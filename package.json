@@ -1,0 +1,16 @@
+{
+  "name": "print-pilot",
+  "description": "A TypeScript-first toolkit for printing HTML, images, and PDF in the browser.",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm run dev:core && pnpm run dev:playground",
+    "dev:core": "pnpm --filter web-print build",
+    "dev:playground": "pnpm --filter playground-plain dev"
+  },
+  "keywords": [
+    "print-pilot"
+  ],
+  "author": "ly",
+  "license": "MIT",
+  "packageManager": "pnpm@10.32.1"
+}

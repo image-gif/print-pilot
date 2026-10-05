@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>test-print</title>
+  <style>
+    /* body {
+      color: red;
+    } */
+    #box {
+      border: 1px solid red;
+    }
+
+    .row {
+      display: flex;
+    }
+
+    .col {
+      flex: 1;
+    }
+
+    @media (width > 700px) {
+      body {
+        color: pink;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="box">
+    <form action="#" id="form">
+      <section class="row">
+        <section class="col">
+          <label for="name">
+            <span>Name: </span>
+            <input type="text" id="name" name="name" />
+          </label>
+        </section>
+        <section class="col">
+          <label for="gender">
+            <span>Gender: </span>
+            <section id="gender">
+              <div>
+                <input type="radio" id="male" name="gender" value="male" />
+                <label for="male">Male</label>
+              </div>
+              <div>
+                <input type="radio" id="female" name="gender" value="female" />
+                <label for="female">Female</label>
+              </div>
+            </section>
+          </label>
+        </section>
+        <section class="col">
+          <label for="age">
+            <span>Age: </span>
+            <input type="number" min="1" name="age" />
+          </label>
+        </section>
+      </section>
+    </form>
+    <button id="print">Print Form</button>
+  </div>
+  <script type="module" src="./index.js"></script>
+</body>
+
+</html>
