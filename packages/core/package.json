@@ -3,14 +3,21 @@
   "version": "1.0.0",
   "description": "A TypeScript-first toolkit for printing HTML, images, and PDF in the browser.",
   "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
   },
+  "files": ["dist", "README.md", "package.json"],
   "scripts": {
     "build": "tsdown --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/image-gif/print-pilot.git"
   },
   "keywords": ["print-pilot"],
   "author": "ly",
