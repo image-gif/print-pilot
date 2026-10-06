@@ -3,8 +3,7 @@
   "description": "A TypeScript-first toolkit for printing HTML, images, and PDF in the browser.",
   "type": "module",
   "scripts": {
-    "dev": "pnpm run dev:core && pnpm run dev:playground",
-    "dev:core": "pnpm --filter web-print build",
+    "dev:core": "pnpm --filter print-pilot build",
     "dev:playground": "pnpm --filter playground-plain dev"
   },
   "keywords": [

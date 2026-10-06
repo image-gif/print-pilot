@@ -1,23 +1,11 @@
-import type { HTMLPrintParams, StyleType } from "../types";
-import type IHandler from "./handler";
-import CommonUitls from "../utils/common";
-import IframeUtils from "../utils/iframe";
-import SingleInstance from "../utils/singleInstance";
+import type { HTMLPrintParams } from "../types";
 import { StyleUtils } from "../utils/style";
+import Handler from "./handler";
 
-const NOOP = CommonUitls.NOOP;
 
-export default class HTMLPrint extends SingleInstance implements IHandler {
-  private iframe: HTMLIFrameElement | null = null;
+export default class HTMLPrint extends Handler<HTMLElement> {
   private styleUtils: StyleUtils | null = null;
-
-  private target!: HTMLElement;
-  private additionalStyles: StyleType[] = [];
   private ignoreModules: HTMLElement[] = [];
-  private deleteIframeAfterPrinting: boolean = false;
-  private onBeforePrint: (e: Event) => void = NOOP;
-  private onAfterPrint: (e: Event) => void = NOOP;
-  private onLoading: (loading: boolean) => void = NOOP;
 
   constructor() {
     super();
@@ -25,96 +13,25 @@ export default class HTMLPrint extends SingleInstance implements IHandler {
   }
 
   public async run(params: HTMLPrintParams) {
-    if (!params.target) {
-      throw new Error('The target parameter must not be undefined or null.');
-    }
-    this.target = params.target;
-    this.additionalStyles = params.styles || [];
+    this.initCommonParams(params);
     this.ignoreModules = params.ignoreModules || [];
-    this.deleteIframeAfterPrinting = params.deleteIframeAfterPrinting === undefined ? true : !!params.deleteIframeAfterPrinting;
-    this.onBeforePrint = params.onBeforePrint || NOOP;
-    this.onAfterPrint = params.onAfterPrint || NOOP;
-    this.onLoading = params.onLoading || NOOP;
 
-    this.onLoading(true);
-    try {
-      const finished = await this.renderInIframe();
-      // After rendering, start printing.
-      if (finished) {
-        this.iframe?.contentWindow?.print();
-      }
-    } catch (err) { }
-    finally {
-      this.onLoading(false);
+    const finished = await this.renderInIframe({
+      getBodyContent: this.createBodyContent.bind(this),
+      getHeaderContent: this.createHeadContent.bind(this),
+    });
+
+    // After rendering, start printing.
+    if (finished) {
+      this.iframe?.contentWindow?.print();
     }
   }
 
-  private async renderInIframe(): Promise<boolean> {
-    const { resolve, reject, promise } = Promise.withResolvers<boolean>();
-    try {
-      if (!this.iframe) {
-        this.iframe = IframeUtils.createIframe('print-container');
-        const printIframe = this.iframe;
-
-        printIframe.addEventListener('load', () => {
-          printIframe.contentWindow?.addEventListener('beforeprint', (e) => {
-            this.onBeforePrint(e);
-          });
-
-          printIframe.contentWindow?.addEventListener('afterprint', (e) => {
-            this.onAfterPrint(e);
-            if (this.deleteIframeAfterPrinting) {
-              document.body.removeChild(printIframe);
-              this.iframe = null;
-            }
-          });
-
-          this.handleAdditionalStyles();
-
-          const clonedNode = this.cloneNode(this.target);
-          printIframe.contentDocument?.body.appendChild(clonedNode);
-          resolve(true);
-        });
-
-        document.body.appendChild(this.iframe!);
-      } else {
-        const clonedNode = this.cloneNode(this.target);
-        this.iframe.contentDocument?.body.replaceChildren(clonedNode);
-        resolve(true);
-      }
-    } catch (err) {
-      reject(err);
-    }
-
-    return promise;
-  }
-
-  // Handling additional styles.
-  private handleAdditionalStyles() {
-    if (!this.additionalStyles.length) {
-      return;
-    }
-    const fragment = this.iframe?.contentDocument?.createDocumentFragment();
-
-    for (const style of this.additionalStyles) {
-      if (!style.value) {
-        continue;
-      }
-
-      if (style.type === 'link') {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = style.value;
-        fragment?.appendChild(link!);
-        continue;
-      }
-
-      const stylesheet = this.iframe?.contentDocument?.createElement('style');
-      const styleContent = this.iframe?.contentDocument?.createTextNode(style.value);
-      stylesheet?.appendChild(styleContent!);
-      fragment?.appendChild(stylesheet!);
-    }
-    this.iframe?.contentDocument?.head.appendChild(fragment!);
+  /**
+   * @description HTML type creates new content through cloning.
+   **/
+  protected override async createBodyContent() {
+    return this.cloneNode(this.target);
   }
 
   private cloneNode<T extends HTMLElement>(target: T): T {
