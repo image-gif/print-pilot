@@ -1,7 +1,6 @@
 {
   "name": "playground-plain",
-  "version": "1.0.0",
-  "description": "",
+  "description": "playground-plain",
   "scripts": {
     "dev": "vite"
   },

@@ -14,6 +14,8 @@ export default class HTMLPrint extends Handler<HTMLElement> {
 
   public async run(params: HTMLPrintParams) {
     this.initCommonParams(params);
+    this.target = this.getElement(params.target);
+
     this.ignoreModules = params.ignoreModules || [];
 
     const finished = await this.renderInIframe({
@@ -57,5 +59,17 @@ export default class HTMLPrint extends Handler<HTMLElement> {
     });
 
     return clonedNode;
+  }
+
+  private getElement(query: HTMLElement | string): HTMLElement {
+    if (query instanceof HTMLElement) {
+      return query;
+    }
+
+    if (typeof query === 'string') {
+      return document.querySelector<HTMLElement>(query)!;
+    }
+
+    throw new Error('Unable to query Element based on `target`.');
   }
 }

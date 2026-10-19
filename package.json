@@ -2,9 +2,11 @@
   "name": "print-pilot",
   "description": "A TypeScript-first toolkit for printing HTML, images, and PDF in the browser.",
   "type": "module",
+  "version": "1.1.0",
   "scripts": {
     "dev:core": "pnpm --filter print-pilot build",
-    "dev:playground": "pnpm --filter playground-plain dev"
+    "dev:playground": "pnpm --filter playground-plain dev",
+    "dev:playground-react": "pnpm --filter playground-react dev"
   },
   "keywords": [
     "print-pilot"
