@@ -1,7 +1,7 @@
-import { print } from "print-pilot"
+import { print } from "print-pilot";
 import { useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
   FieldDescription,
@@ -10,8 +10,8 @@ import {
   FieldLegend,
   FieldSeparator,
   FieldSet,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -19,8 +19,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import Box from "../box";
 
 const months = [
@@ -37,7 +37,7 @@ const months = [
   { label: "10", value: "10" },
   { label: "11", value: "11" },
   { label: "12", value: "12" },
-]
+];
 
 const years = [
   { label: "YYYY", value: null },
@@ -47,7 +47,7 @@ const years = [
   { label: "2027", value: "2027" },
   { label: "2028", value: "2028" },
   { label: "2029", value: "2029" },
-]
+];
 
 function FieldDemo() {
   return (
@@ -173,9 +173,8 @@ function FieldDemo() {
         </FieldGroup>
       </form>
     </div>
-  )
+  );
 }
-
 
 export default function HtmlDemo() {
   const target = useRef<HTMLDivElement>(null);
@@ -183,15 +182,24 @@ export default function HtmlDemo() {
 
   const printHandler = () => {
     print({
-      printType: 'html',
+      printType: "html",
       target: target.current!,
-      deleteIframeAfterPrinting: false,
+    });
+  };
+
+  const printCanvasHandler = () => {
+    print({
+      printType: "html",
+      target: canvasTarget.current!,
     });
   }
 
   useEffect(() => {
-    if (canvasTarget.current && typeof canvasTarget.current.getContext === 'function') {
-      const ctx = canvasTarget.current.getContext('2d')!;
+    if (
+      canvasTarget.current &&
+      typeof canvasTarget.current.getContext === "function"
+    ) {
+      const ctx = canvasTarget.current.getContext("2d")!;
       ctx.fillStyle = "rgb(200,0,0)";
       ctx.fillRect(10, 10, 55, 50);
 
@@ -202,18 +210,18 @@ export default function HtmlDemo() {
 
   return (
     <section>
-      <h3>HTML Example</h3>
-      <Box printCallback={printHandler}>
+      <h3 className="text-center">HTML Examples</h3>
+      <Box title="A simple form" printCallback={printHandler}>
         <div ref={target}>
           <FieldDemo />
         </div>
       </Box>
 
-      <div>
+      <Box title="A canvas" printCallback={printCanvasHandler}>
         <canvas ref={canvasTarget} id="tutorial" width="150" height="150">
           Nothing
         </canvas>
-      </div>
+      </Box>
     </section>
-  )
+  );
 }

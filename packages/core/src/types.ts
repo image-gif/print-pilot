@@ -61,6 +61,7 @@ export type BasePrintParams = {
    **/
   styles?: StyleType[];
   /**
+   * @deprecated will be delete.
    * @description delete iframe after printing.
    * @default true
    **/
