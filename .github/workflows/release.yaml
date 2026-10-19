@@ -26,10 +26,12 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Type check core package
-        run: pnpm --filter print-pilot exec tsc --noEmit
+        working-directory: packages/core
+        run: pnpm exec tsc --noEmit
 
       - name: Build core package
-        run: pnpm --filter print-pilot exec tsdown
+        working-directory: packages/core
+        run: pnpm exec tsdown
 
   publish:
     name: Publish to npm
@@ -53,7 +55,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build core package
-        run: pnpm --filter print-pilot exec tsdown
+        working-directory: packages/core
+        run: pnpm exec tsdown
 
       - name: Publish core package
         working-directory: packages/core
