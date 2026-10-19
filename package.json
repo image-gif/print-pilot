@@ -6,12 +6,16 @@
   "scripts": {
     "dev:core": "pnpm --filter print-pilot build",
     "dev:playground": "pnpm --filter playground-plain dev",
-    "dev:playground-react": "pnpm --filter playground-react dev"
+    "dev:playground-react": "pnpm --filter playground-react dev",
+    "prepare": "husky"
   },
   "keywords": [
     "print-pilot"
   ],
   "author": "ly",
   "license": "MIT",
-  "packageManager": "pnpm@10.32.1"
+  "packageManager": "pnpm@10.32.1",
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
 }
