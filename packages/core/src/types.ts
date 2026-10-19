@@ -61,6 +61,7 @@ export type BasePrintParams = {
    **/
   styles?: StyleType[];
   /**
+   * @deprecated will be delete.
    * @description delete iframe after printing.
    * @default true
    **/
@@ -82,9 +83,11 @@ export type BasePrintParams = {
 export type HTMLPrintParams = {
   printType: 'html';
   /**
-   * @description Unique identification of printing area. Only supports ID.
+   * @description Unique identification of printing area. 
+   * When providing a string, it must be able to uniquely identify the Element in the document, 
+   * and the underlying query can be done through `document.querySelector`
    **/
-  target: HTMLElement;
+  target: HTMLElement | string;
   /**
    * @description Modules that need to be ignored.
    * @default []
@@ -115,3 +118,8 @@ export type PDFPrintParams = {
 } & BasePrintParams;
 
 export type PrintParams = HTMLPrintParams | IMAGEPrintParams | PDFPrintParams;
+
+
+export type BrowerInfo = {
+  name: 'Chrome' | 'Firefox' | 'Safari' | 'Edge' | 'Opera' | 'IE' | 'Unknown';
+}
