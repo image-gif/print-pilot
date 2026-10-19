@@ -37,6 +37,9 @@ jobs:
     name: Publish to npm
     needs: ci
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -47,9 +50,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: '22.14'
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Ensure npm CLI supports trusted publishing
+        run: npm install -g npm@11.5.1
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -60,8 +66,6 @@ jobs:
 
       - name: Publish core package
         working-directory: packages/core
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           VERSION=$(node -p "require('./package.json').version")
           if npm view print-pilot@"$VERSION" version >/dev/null 2>&1; then
